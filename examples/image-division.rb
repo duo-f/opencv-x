@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require "opencv"
-require_relative "lib/hsv"
+require_relative "../lib/hsv"
 require 'byebug' if ENV['DEBUG']
 
 include OpenCV
@@ -15,7 +15,7 @@ class App
     new.run
   end
 
-  def initialize(rows: 2, columns: 2)
+  def initialize(columns: 2, rows: 2)
     @capture = CvCapture::open
     @rows, @columns = Integer(rows), Integer(columns)
     set_windows
@@ -25,10 +25,21 @@ class App
     image = capture.query
     width, height = image.width, image.height
 
+    piece_width = width / columns
+    piece_height = height / rows
+
+    hspace = 10
+    vspace = 30
+
     @windows = (0...rows).map do |row|
       (0...columns).map do |column|
-        window = GUI::Window.new((column * columns + row).to_s)
-        window.move row * height + 5, width * column + 5
+        id = ((row * columns) + column).to_s
+        window = GUI::Window.new(id)
+        x = column * piece_width + hspace * column
+        y = row * piece_height + vspace * row
+        p "Window #{id} at (#{x},#{y}) size: #{piece_width}x#{piece_height}"
+        window.move  x, y
+
         window
       end
     end
@@ -50,8 +61,8 @@ class App
       width = rect.width / columns
       height = rect.height / rows
 
-      each_window do |window, x, y|
-        image.set_roi(CvRect.new(width * x, height * y, width, height)) do |part|
+      each_window do |window, row, col|
+        image.set_roi(CvRect.new(width * col, height * row, width, height)) do |part|
           window.show part
         end
       end
@@ -67,4 +78,4 @@ class App
   end
 end
 
-App.new(rows: ARGV[0] || 2, columns: ARGV[1] || 2).run
+App.new(columns: ARGV[0] || 2, rows: ARGV[1] || 2).run

@@ -1,0 +1,28 @@
+---
+- !ruby/object:HSVRange
+  from: !ruby/object:HSV
+    h: 0
+    s: 151
+    v: 150
+  to: !ruby/object:HSV
+    h: 8
+    s: 255
+    v: 249
+- !ruby/object:HSVRange
+  from: !ruby/object:HSV
+    h: 22
+    s: 98
+    v: 103
+  to: !ruby/object:HSV
+    h: 73
+    s: 249
+    v: 180
+- !ruby/object:HSVRange
+  from: !ruby/object:HSV
+    h: 86
+    s: 117
+    v: 1
+  to: !ruby/object:HSV
+    h: 169
+    s: 211
+    v: 194
